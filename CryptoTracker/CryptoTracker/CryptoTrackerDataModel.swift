@@ -47,42 +47,51 @@ struct CoinPrice: Decodable {
 //}
 
 class CryptoTrackerDataModel {
+    let session = URLSession.shared
     
     func getCoinList(completionHandler: @escaping (CoinList) -> ()) {
         guard let url = URL(string: "https://min-api.cryptocompare.com/data/all/coinlist?api_key=00bd6c061026737fd4009bff205f66eaa9fa588f558ee71f9170ac3a51535f21") else { return }
-        let session = URLSession.shared
-                session.dataTask(with: url) { (data, response, error) in
-                    if let data = data {
-                        do {
-                            let results = try JSONDecoder().decode(CoinList.self, from: data)
-                            completionHandler(results)
-                        } catch {
-                            print("Error \(error)")
-                        }
-                    }
-        
-                }.resume()
+        session.dataTask(with: url) { (data, response, error) in
+            if let data = data {
+                do {
+                    let results = try JSONDecoder().decode(CoinList.self, from: data)
+                    completionHandler(results)
+                } catch {
+                    print("Error \(error)")
+                }
+            }
+            
+            }.resume()
     }
     
     func coinPrice(symbol: String, completionHandler: @escaping (CoinPrice) -> ()) {
         guard let url = URL(string:  "https://min-api.cryptocompare.com/data/price?fsym=\(symbol)&tsyms=USD&api_key=00bd6c061026737fd4009bff205f66eaa9fa588f558ee71f9170ac3a51535f21") else { return }
-            let session = URLSession.shared
-            session.dataTask(with: url) { (data, response, error) in
-                if let data = data {
-                    do {
-                        let results = try JSONDecoder().decode(CoinPrice.self, from: data)
-                        completionHandler(results)
-                    } catch {
-                        print("Error \(error)")
-                    }
+        session.dataTask(with: url) { (data, response, error) in
+            if let data = data {
+                do {
+                    let results = try JSONDecoder().decode(CoinPrice.self, from: data)
+                    completionHandler(results)
+                } catch {
+                    print("Error \(error)")
                 }
-                
-                }.resume()
+            }
+            
+            }.resume()
     }
-
-    func getImageFromUrl(imageURL: String) -> Data  {
-        guard let iconURL = URL(string: "https://www.cryptocompare.com\(imageURL)"),
-            let data = try? Data(contentsOf:iconURL) else { fatalError() }
-        return data
+    
+    func getImageFromUrl(imageURL: String, completionHandler: @escaping (Data) -> ()) {
+        guard let url = URL(string: "https://www.cryptocompare.com\(imageURL)") else { return }
+        session.dataTask(with: url) { (data, response, error) in
+            if let data = data {
+                completionHandler(data)
+            }
+        }.resume()
+    }
+    
+    func cancelTask(){
     }
 }
+
+//        guard let iconURL = URL(string: "https://www.cryptocompare.com\(imageURL)"),
+//            let data = try? Data(contentsOf:iconURL) else { fatalError() }
+//        return data

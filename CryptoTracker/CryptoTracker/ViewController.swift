@@ -16,6 +16,7 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
     var sortedCoinList: [CoinName]?
     var filterdCoinList: [CoinName]?
     var isSearching: Bool = false
+    var imageDict = [String : UIImage?]()
     
     //@IBOutlet weak var coinListPicker: UIPickerView!
     @IBOutlet weak var tableView: UITableView!
@@ -23,9 +24,9 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        coinListPicker.delegate = nil
-//        coinListPicker.dataSource = nil
         loadCryptoData()
+        tableView.prefetchDataSource = self
+
     }
     
     func loadCryptoData() {
@@ -63,6 +64,7 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         let myCell = tableView.dequeueReusableCell(withIdentifier: "cryptoCell", for: indexPath)
         
         guard var coinList = isSearching ? filterdCoinList : coinList else {fatalError()}
@@ -70,19 +72,30 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
         self.sortedCoinList = coinList
         
         myCell.textLabel?.text = "\(coinList[indexPath.row].CoinName)"
-        
-//        guard let symbol = self.sortedCoinList?[indexPath.row].Symbol else { fatalError() }
-//            cryptoTrackerData.coinPrice(symbol: symbol) { (coinPrice) in
-//                DispatchQueue.main.sync {
-//                    myCell.imageView?.image = UIImage(data: self.cryptoTrackerData.getImageFromUrl(imageURL: (self.sortedCoinList?[indexPath.row].ImageUrl)!))
-//                }
-//            }
+        if let myImage = imageDict[coinList[indexPath.row].CoinName] {
+            myCell.imageView?.image = myImage
+        }
+       
         return myCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
+        guard let coinInformation = sortedCoinList?[indexPath.row] else {fatalError()}
+        print(coinInformation.Symbol)
     }
     
+}
+
+extension ViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard var coinList = isSearching ? filterdCoinList : sortedCoinList else {fatalError()}
+        indexPaths.forEach {
+            let coinName = coinList[$0.row].CoinName
+            self.cryptoTrackerData.getImageFromUrl(imageURL: coinList[$0.row].ImageUrl!, completionHandler: { (Data) in
+                self.imageDict[coinName] = UIImage(data: Data)
+            })
+            //imageDict[coinList[$0.row].CoinName] = UIImage(data: self.cryptoTrackerData.getImageFromUrl(imageURL: coinList[$0.row].ImageUrl!))
+        }
+    }
 }
 
