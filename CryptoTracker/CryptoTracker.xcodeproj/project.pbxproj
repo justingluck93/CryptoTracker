@@ -13,6 +13,7 @@
 		40F6AEC62213B07400192304 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40F6AEC52213B07400192304 /* Assets.xcassets */; };
 		40F6AEC92213B07400192304 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 40F6AEC72213B07400192304 /* LaunchScreen.storyboard */; };
 		40F6AED42213B07500192304 /* CryptoTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F6AED32213B07500192304 /* CryptoTrackerTests.swift */; };
+		40F6AEDF2213B9C700192304 /* CryptoTrackerDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F6AEDE2213B9C700192304 /* CryptoTrackerDataModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		40F6AECF2213B07500192304 /* CryptoTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CryptoTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F6AED32213B07500192304 /* CryptoTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTrackerTests.swift; sourceTree = "<group>"; };
 		40F6AED52213B07500192304 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		40F6AEDE2213B9C700192304 /* CryptoTrackerDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoTrackerDataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				40F6AEBE2213B05D00192304 /* AppDelegate.swift */,
 				40F6AEC02213B05D00192304 /* ViewController.swift */,
+				40F6AEDE2213B9C700192304 /* CryptoTrackerDataModel.swift */,
 				40F6AEC22213B05D00192304 /* Main.storyboard */,
 				40F6AEC52213B07400192304 /* Assets.xcassets */,
 				40F6AEC72213B07400192304 /* LaunchScreen.storyboard */,
@@ -198,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40F6AEC12213B05D00192304 /* ViewController.swift in Sources */,
+				40F6AEDF2213B9C700192304 /* CryptoTrackerDataModel.swift in Sources */,
 				40F6AEBF2213B05D00192304 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
