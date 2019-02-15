@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class ViewController:  UIViewController {
     
     var cryptoTrackerData = CryptoTrackerDataModel()
     var coinList: [CoinName]?
@@ -18,7 +18,6 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
     var imageDict = [String : UIImage?]()
     var isPrefetching = false
     
-    //@IBOutlet weak var coinListPicker: UIPickerView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -49,7 +48,16 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    //SearchBarDelegate
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? CryptoCoinInformationViewController {
+            destination.coin = sortedCoinList![(tableView.indexPathForSelectedRow?.row)!]
+            destination.image = imageDict[sortedCoinList![(tableView.indexPathForSelectedRow?.row)!].CoinName]!
+        }
+    }
+}
+
+extension ViewController: UISearchBarDelegate {
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let topIndex = IndexPath(row: 0, section: 0)
         
@@ -69,21 +77,32 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
             tableView.reloadData()
         }
     }
+
+}
+
+extension ViewController: UITableViewDelegate {
     
-    //TableViewDelegates
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "showCryptoInfo", sender: self)
+    }
+    
+}
+
+extension ViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let coins = isSearching ? filterdCoinList?.count : coinList?.count
         return coins!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let myCell = tableView.dequeueReusableCell(withIdentifier: "cryptoCell", for: indexPath)
         
         guard var coinList = isSearching ? filterdCoinList : coinList else { fatalError() }
         coinList = coinList.sorted { $0.CoinName < $1.CoinName }
         self.sortedCoinList = coinList
-
+        
         myCell.textLabel?.text = "\(coinList[indexPath.row].CoinName)"
         
         if let myImage = imageDict[coinList[indexPath.row].CoinName] {
@@ -94,22 +113,13 @@ class ViewController:  UIViewController, UITableViewDelegate, UITableViewDataSou
             imageDict[coinList[indexPath.row].CoinName] = UIImage(data: data!)
             myCell.imageView?.image = UIImage(data: data!)
         }
-       
         return myCell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "showCryptoInfo", sender: self)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? CryptoCoinInformationViewController {
-            destination.coin = sortedCoinList![(tableView.indexPathForSelectedRow?.row)!]
-        }
-    }
 }
 
 extension ViewController: UITableViewDataSourcePrefetching {
+    
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         isPrefetching = true
         guard var coinList = sortedCoinList else {fatalError()}
@@ -121,5 +131,5 @@ extension ViewController: UITableViewDataSourcePrefetching {
         }
         isPrefetching = false
     }
+    
 }
-

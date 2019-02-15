@@ -17,6 +17,7 @@ struct CoinName: Decodable {
     var CoinName: String
     var Symbol: String
     var ImageUrl: String?
+    var FullName: String
 }
 
 struct CoinPrice: Decodable {
