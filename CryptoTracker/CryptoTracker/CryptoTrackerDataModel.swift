@@ -76,7 +76,7 @@ class CryptoTrackerDataModel {
                 }
             }
             
-            }.resume()
+        }.resume()
     }
     
     func getImageFromUrl(imageURL: String, completionHandler: @escaping (Data) -> ()) {
