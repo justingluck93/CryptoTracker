@@ -36,8 +36,11 @@ class CryptoCoinInformationViewController: UIViewController {
             self.cryptoTrackerData.getDailyDataForCoin(symbol: (self.coin?.Symbol)!, completionHandler: { (Data) in
                 self.dailyCoinData = Data
                 DispatchQueue.main.sync {
-                    guard let low = self.dailyCoinData?.Data[0].low else { return }
-                    self.low.text = "$\(low)"
+                    guard let low = self.dailyCoinData?.Data[0].low else {
+                        self.low.text = "N/A"
+                        return
+                    }
+                    self.low.text = "Low: $\(low)"
                 }
             })
         }
