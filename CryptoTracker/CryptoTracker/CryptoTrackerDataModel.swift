@@ -60,7 +60,6 @@ struct DataPoints: Decodable {
 //struct USDInformation: Decodable {
 //    var PRICE: String
 //}
-//https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym=USD&limit=1
 
 class CryptoTrackerDataModel {
     let session = URLSession.shared
@@ -80,9 +79,12 @@ class CryptoTrackerDataModel {
             }.resume()
     }
     
-    func getCoinList(completionHandler: @escaping (CoinList) -> ()) {
+    func getCoinList(completionHandler: @escaping (CoinList) -> (), failureCompletionHandler: @escaping (Error) -> ()) {
         guard let url = URL(string: "https://min-api.cryptocompare.com/data/all/coinlist?api_key=00bd6c061026737fd4009bff205f66eaa9fa588f558ee71f9170ac3a51535f21") else { return }
         session.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                failureCompletionHandler(error)
+            }
             if let data = data {
                 do {
                     let results = try JSONDecoder().decode(CoinList.self, from: data)
@@ -119,6 +121,5 @@ class CryptoTrackerDataModel {
         }.resume()
     }
     
-    func cancelTask(){
-    }
+
 }

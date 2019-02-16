@@ -36,7 +36,18 @@ class ViewController:  UIViewController {
     }
     
     func loadCryptoData() {
-        cryptoTrackerData.getCoinList() { (coinList) in
+//        cryptoTrackerData.getCoinList() { (coinList) in
+//            self.coinList = [CoinName](coinList.Data.values)
+//            DispatchQueue.main.sync {
+//                self.tableView.delegate = self
+//                self.tableView.dataSource = self
+//                self.searchBar.delegate = self
+//                self.searchBar.returnKeyType = .done
+//                self.tableView.reloadData()
+//            }
+//        }
+//
+        cryptoTrackerData.getCoinList(completionHandler: { (coinList) in
             self.coinList = [CoinName](coinList.Data.values)
             DispatchQueue.main.sync {
                 self.tableView.delegate = self
@@ -45,7 +56,34 @@ class ViewController:  UIViewController {
                 self.searchBar.returnKeyType = .done
                 self.tableView.reloadData()
             }
+        }, failureCompletionHandler: { (Error) in
+            DispatchQueue.main.sync {
+                self.showErrorAlert(err: Error)
+            }
+        })
+        
+    }
+    
+    func showErrorAlert(err: Error) {
+        var title: String
+        var message: String
+        let myErr = err as NSError
+        
+        switch myErr.code {
+        case -1009:
+            title = "No Internet Connection"
+            message = "Please connect to the internet and try again"
+        default:
+            title = "Something went wrong"
+            message = "Please check your connection and try again"
         }
+        
+        let alert = UIAlertController(title: title , message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Try Agan" , style: .default, handler: { (UIAlertAction) in
+           self.loadCryptoData()
+        }))
+        
+        self.present(alert, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
