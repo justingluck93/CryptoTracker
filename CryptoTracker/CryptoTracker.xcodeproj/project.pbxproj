@@ -83,8 +83,8 @@
 			children = (
 				40F6AEBE2213B05D00192304 /* AppDelegate.swift */,
 				40F6AEC02213B05D00192304 /* ViewController.swift */,
-				40F6AEDE2213B9C700192304 /* CryptoTrackerDataModel.swift */,
 				D0281E3922176EAD006082A4 /* CryptoCoinInformationViewController.swift */,
+				40F6AEDE2213B9C700192304 /* CryptoTrackerDataModel.swift */,
 				40F6AEC22213B05D00192304 /* Main.storyboard */,
 				40F6AEC52213B07400192304 /* Assets.xcassets */,
 				40F6AEC72213B07400192304 /* LaunchScreen.storyboard */,
